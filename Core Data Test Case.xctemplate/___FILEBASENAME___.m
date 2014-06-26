@@ -36,9 +36,10 @@
 
 	// Register a custom store class.
 	if ([self storeClass] != nil){
-	[[persistentStoreCoordinator class] registerStoreClass:[self storeClass] forStoreType:[self storeType]];
-	 [self setCoordinator:persistentStoreCoordinator];
+		[[persistentStoreCoordinator class] registerStoreClass:[self storeClass] forStoreType:[self storeType]];
 	}
+	
+	[self setCoordinator:persistentStoreCoordinator];
 	// Add the store to the coordinator
 	if (![[self coordinator] addPersistentStoreWithType:[self storeType] configuration:nil URL:[self storeURL] options:[self storeOptions] error:&error]){
 	    XCTFail(@"Could not add store, %@", error);
