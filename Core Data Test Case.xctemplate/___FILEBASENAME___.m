@@ -41,6 +41,9 @@
 	
 	[self setCoordinator:persistentStoreCoordinator];
 	// Add the store to the coordinator
+    // Note that in many cases, a test should also remove any previously created file at the storeURL location.
+	// Doing so should work as follows:
+	// [[NSFileManager defaultManager] removeItemAtURL:[self storeURL] error:&error];
 	if (![[self coordinator] addPersistentStoreWithType:[self storeType] configuration:nil URL:[self storeURL] options:[self storeOptions] error:&error]){
 	    XCTFail(@"Could not add store, %@", error);
 	}
@@ -57,7 +60,9 @@
 	// Doing so should work as follows:
 	// [[NSFileManager defaultManager] removeItemAtURL:[self storeURL] error:&error];
 	// Unregister the store
-	[[[self coordinator] class] registerStoreClass:self forStoreType:[self storeType]];
+	if ([self storeClass] != nil){
+		[[[self coordinator] class] registerStoreClass:nil forStoreType:[self storeType]];
+	}
 
 	[super tearDown];
 }
@@ -73,7 +78,7 @@
 }
 
 - (Class )storeClass {
-	[NSException raise:NSInvalidArgumentException format:@"[%@ %@]: Test case classes should implement this method, returning the store class to register.", NSStringFromClass([self class]), NSStringFromSelector(_cmd)];
+	// Only override if you are testing a custom store, such as an NSAtomicStore or NSIncrementalStore
 	return nil;
 }
 
