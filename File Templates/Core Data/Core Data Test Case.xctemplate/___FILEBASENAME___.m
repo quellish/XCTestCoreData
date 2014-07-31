@@ -55,7 +55,9 @@
 
 	store = [[self coordinator] persistentStoreForURL:[self storeURL]];
 	// Remove the store from the coordinator. If this fails that is fine.
-	[[self coordinator] removePersistentStore:store error:&error];
+	if (store != nil){
+		[[self coordinator] removePersistentStore:store error:&error];
+	}
 	// Note that in many cases, a test should also remove any file created at the storeURL location.
 	// Doing so should work as follows:
 	// [[NSFileManager defaultManager] removeItemAtURL:[self storeURL] error:&error];
